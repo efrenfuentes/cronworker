@@ -42,7 +42,7 @@ The jobs are read from the configuration file.`,
 			// Create a closure to capture the job details
 			jobFunc := func(j CronJob) func() {
 				return func() {
-					fmt.Printf("Running job: %s\n", j.Name)
+					log.Printf("Running job: %s\n", j.Name)
 
 					// Execute the command
 					cmd := exec.Command(j.Command, j.Args...)
@@ -52,7 +52,7 @@ The jobs are read from the configuration file.`,
 						return
 					}
 
-					fmt.Printf("Job %s completed successfully\nOutput: %s\n", j.Name, string(output))
+					log.Printf("Job %s completed successfully\nOutput: %s\n", j.Name, string(output))
 				}
 			}(job)
 
