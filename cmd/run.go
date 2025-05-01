@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
-	"strings"
 
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/cobra"
@@ -12,10 +11,11 @@ import (
 )
 
 type CronJob struct {
-	Name     string `mapstructure:"name"`
-	Schedule string `mapstructure:"schedule"`
-	Command  string `mapstructure:"command"`
-	Enabled  bool   `mapstructure:"enabled"`
+	Name     string   `mapstructure:"name"`
+	Schedule string   `mapstructure:"schedule"`
+	Command  string   `mapstructure:"command"`
+	Args     []string `mapstructure:"args"`
+	Enabled  bool     `mapstructure:"enabled"`
 }
 
 var runCmd = &cobra.Command{
@@ -44,15 +44,8 @@ The jobs are read from the configuration file.`,
 				return func() {
 					fmt.Printf("Running job: %s\n", j.Name)
 
-					// Split command into parts
-					parts := strings.Fields(j.Command)
-					if len(parts) == 0 {
-						log.Printf("Error: Empty command for job %s", j.Name)
-						return
-					}
-
 					// Execute the command
-					cmd := exec.Command(parts[0], parts[1:]...)
+					cmd := exec.Command(j.Command, j.Args...)
 					output, err := cmd.CombinedOutput()
 					if err != nil {
 						log.Printf("Error running job %s: %v\nOutput: %s", j.Name, err, string(output))

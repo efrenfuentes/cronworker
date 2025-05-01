@@ -2,7 +2,9 @@
 
 # Cron jobs configuration
 jobs:
-  - name: "example-job"
+  - name: "hello-world"
     schedule: "*/2 * * * *"  # Run every 2 minutes
-    command: "echo 'Hello from cronworker'"
+    command: "echo"
+    args:
+      - "Hello, World!"
     enabled: true
