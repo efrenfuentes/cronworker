@@ -8,3 +8,16 @@ jobs:
     args:
       - "Hello, World!"
     enabled: true
+  
+  - name: "curl-request"
+    schedule: "*/5 * * * *"  # Run every 5 minutes
+    command: "curl"
+    args:
+      - "-X"
+      - "POST"
+      - "-H"
+      - "X-API-Key: 1234567890"
+      - "-H"
+      - "x-trace-id: cronworker"
+      - "http://localhost/endpoint"
+    enabled: false
